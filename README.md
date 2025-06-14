@@ -1,4 +1,4 @@
- markdirs
+# markdirs
 
 **markdirs** is a command-line tool to recursively write a file with specified content to every directory under a given root directory.
 This is useful for marking directories (e.g., with a `.backup` or `.nomedia` file), automation, or batch configuration.
@@ -62,7 +62,7 @@ go build -o markdirs
 
 ## License
 
-MIT License (or specify your license here)
+[MIT License](LICENSE)
 
 ---
 
