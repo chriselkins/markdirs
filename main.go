@@ -10,16 +10,20 @@ import (
 )
 
 const (
-	// Version is the current version of the tool.
-	Version = "1.0.0"
-
 	defaultPermission = 0644 // Default file permission for created files
 )
 
 var (
-	overwrite = flag.Bool("o", false, "Overwrite existing file if present")
-	quiet     = flag.Bool("q", false, "Quiet mode (suppress output except errors)")
-	help      = flag.Bool("h", false, "Show help and exit")
+	// Version is the version of the tool, set at build time
+	Version   = "dev"
+	Commit    = ""
+	BuildDate = ""
+
+	// Command-line flags
+	overwrite   = flag.Bool("o", false, "Overwrite existing file if present")
+	quiet       = flag.Bool("q", false, "Quiet mode (suppress output except errors)")
+	help        = flag.Bool("h", false, "Show help and exit")
+	showVersion = flag.Bool("v", false, "Print version and exit")
 )
 
 func usage() {
@@ -45,6 +49,11 @@ func run() int {
 	if *help {
 		usage()
 		return 0
+	}
+
+	if *showVersion {
+		fmt.Printf("Version: %s\nCommit: %s\nBuild Date: %s\n", Version, Commit, BuildDate)
+		os.Exit(0)
 	}
 
 	args := flag.Args()

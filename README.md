@@ -26,6 +26,7 @@ Recursively write a file with the specified name and content to every folder und
 | `-o` | Overwrite existing files (default: skip) |
 | `-q` | Quiet mode (suppress output)             |
 | `-h` | Show help and exit                       |
+| `-v` | Print version and exit                   |
 
 ## Examples
 
@@ -63,8 +64,3 @@ go build -o markdirs
 ## License
 
 [MIT License](LICENSE)
-
----
-
-**Version:** 1.0.0
-**Author:** Chris Elkins
