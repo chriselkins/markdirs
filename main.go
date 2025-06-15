@@ -40,7 +40,7 @@ func run() int {
 	// Command-line flags
 	overwrite := flag.Bool("o", false, "Overwrite existing file if present")
 	quiet := flag.Bool("q", false, "Quiet mode (suppress output except errors)")
-	mode := flag.String("m", "0644", "File permission/mode (e.g., 0644, 0600)")
+	mode := flag.String("m", "0644", "File permission/mode (default: 0644, e.g., 0600, 0640)")
 	failFast := flag.Bool("f", false, "Fail immediately on error instead of continuing")
 	help := flag.Bool("h", false, "Show help and exit")
 	showVersion := flag.Bool("v", false, "Print version and exit")
