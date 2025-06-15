@@ -35,7 +35,7 @@ echo "Building release artifacts..."
 make release
 
 echo "Creating GitHub release and uploading artifacts..."
-gh release create "${VERSION}" dist/*.zip dist/SHA256SUMS \
+gh release create "${VERSION}" dist/* \
   --title "${VERSION}" \
   --notes "${NOTES:-"Release $VERSION"}"
 
