@@ -5,10 +5,9 @@ import (
 	"fmt"
 	"io"
 	"os"
-)
+	"strconv"
 
-const (
-	defaultPermission = 0644 // Default file permission for created files
+	"github.com/chriselkins/markdirs/markdirs"
 )
 
 var (
@@ -16,12 +15,6 @@ var (
 	Version   = "dev"
 	Commit    = ""
 	BuildDate = ""
-
-	// Command-line flags
-	overwrite   = flag.Bool("o", false, "Overwrite existing file if present")
-	quiet       = flag.Bool("q", false, "Quiet mode (suppress output except errors)")
-	help        = flag.Bool("h", false, "Show help and exit")
-	showVersion = flag.Bool("v", false, "Print version and exit")
 )
 
 func usage() {
@@ -31,7 +24,10 @@ Recursively write a file with the specified name and content to every folder und
 
 Flags:
   -o    Overwrite existing files (default: do not overwrite)
-  -q    Quiet mode (no informational output)
+  -q    Quiet mode (suppress output except errors)
+  -m    File permission/mode (default: 0644)
+  -f    Fail fast on error (default: continue processing)
+  -v    Show version information and exit
   -h    Show this help message
 `, os.Args[0])
 }
@@ -41,6 +37,14 @@ func main() {
 }
 
 func run() int {
+	// Command-line flags
+	overwrite := flag.Bool("o", false, "Overwrite existing file if present")
+	quiet := flag.Bool("q", false, "Quiet mode (suppress output except errors)")
+	mode := flag.String("m", "0644", "File permission/mode (e.g., 0644, 0600)")
+	failFast := flag.Bool("f", false, "Fail immediately on error instead of continuing")
+	help := flag.Bool("h", false, "Show help and exit")
+	showVersion := flag.Bool("v", false, "Print version and exit")
+
 	flag.Usage = usage
 	flag.Parse()
 
@@ -63,6 +67,14 @@ func run() int {
 
 	root, fileName, contentArg := args[0], args[1], args[2]
 
+	modeInt, err := strconv.ParseUint(*mode, 8, 32)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Invalid file mode: %v\n", err)
+		return 1
+	}
+
+	fileMode := os.FileMode(modeInt)
+
 	// content for the file can be provided as a string or read from stdin
 	content, err := func() ([]byte, error) {
 		if contentArg == "-" {
@@ -77,7 +89,7 @@ func run() int {
 		return 1
 	}
 
-	err = MarkDirs(root, fileName, content, *overwrite, *quiet)
+	err = markdirs.MarkDirs(root, fileName, content, *overwrite, *quiet, *failFast, fileMode)
 
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "WalkDir error: %v\n", err)
