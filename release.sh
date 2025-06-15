@@ -3,9 +3,6 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-# set safe PATH
-export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
-
 # Usage: ./release.sh v1.0.2 "Release notes or changelog here"
 VERSION="$1"
 NOTES="$2"
