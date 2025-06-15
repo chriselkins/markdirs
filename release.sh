@@ -3,7 +3,11 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-# Usage: ./release.sh v1.0.2 "Release notes or changelog here"
+if [[ $# -lt 2 ]]; then
+  echo "Usage: $0 v1.0.2 \"Release notes or changelog\""
+  exit 1
+fi
+
 VERSION="$1"
 NOTES="$2"
 
@@ -20,8 +24,8 @@ fi
 # Ensure clean git state
 git diff-index --quiet HEAD -- || { echo "Uncommitted changes!"; exit 1; }
 
-echo "Tagging release $VERSION..."
-git tag "$VERSION"
+echo "Tagging release ${VERSION}..."
+git tag "${VERSION}"
 git push
 git push --tags
 
@@ -29,12 +33,12 @@ echo "Building release artifacts..."
 make release
 
 echo "Creating GitHub release and uploading artifacts..."
-gh release create "$VERSION" dist/*.zip dist/SHA256SUMS \
-  --title "$VERSION" \
+gh release create "${VERSION}" dist/*.zip dist/SHA256SUMS \
+  --title "${VERSION}" \
   --notes "${NOTES:-"Release $VERSION"}"
 
-echo "Release $VERSION published!"
+echo "Release ${VERSION} published!"
 
 # Prompt pkg.go.dev to fetch the new tag
-echo "Requesting pkg.go.dev to fetch $VERSION..."
-go list -m "github.com/chriselkins/markdirs@$VERSION"
+echo "Requesting pkg.go.dev to fetch ${VERSION}..."
+go list -m "github.com/chriselkins/markdirs@${VERSION}"
