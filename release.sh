@@ -34,3 +34,7 @@ gh release create "$VERSION" dist/*.zip dist/SHA256SUMS \
   --notes "${NOTES:-"Release $VERSION"}"
 
 echo "Release $VERSION published!"
+
+# Prompt pkg.go.dev to fetch the new tag
+echo "Requesting pkg.go.dev to fetch $VERSION..."
+go list -m "github.com/chriselkins/markdirs@$VERSION"
