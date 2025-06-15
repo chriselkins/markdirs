@@ -1,0 +1,39 @@
+#!/bin/bash
+
+set -euo pipefail
+IFS=$'\n\t'
+
+# set safe PATH
+export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+
+# Usage: ./release.sh v1.0.2 "Release notes or changelog here"
+VERSION="$1"
+NOTES="$2"
+
+if [ -z "$VERSION" ]; then
+  echo "Usage: $0 v1.0.2 \"Release notes or changelog\""
+  exit 1
+fi
+
+if ! command -v gh >/dev/null 2>&1; then
+  echo "GitHub CLI (gh) is required. Install it: https://cli.github.com/"
+  exit 2
+fi
+
+# Ensure clean git state
+git diff-index --quiet HEAD -- || { echo "Uncommitted changes!"; exit 1; }
+
+echo "Tagging release $VERSION..."
+git tag "$VERSION"
+git push
+git push --tags
+
+echo "Building release artifacts..."
+make release
+
+echo "Creating GitHub release and uploading artifacts..."
+gh release create "$VERSION" dist/*.zip dist/SHA256SUMS \
+  --title "$VERSION" \
+  --notes "${NOTES:-"Release $VERSION"}"
+
+echo "Release $VERSION published!"
