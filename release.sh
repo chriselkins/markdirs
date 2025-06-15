@@ -21,6 +21,8 @@ if ! command -v gh >/dev/null 2>&1; then
   exit 2
 fi
 
+go mod tidy
+
 # Ensure clean git state
 git diff-index --quiet HEAD -- || { echo "Uncommitted changes!"; exit 1; }
 
