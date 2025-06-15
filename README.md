@@ -6,23 +6,34 @@
 
 # markdirs
 
-**markdirs** is a command-line tool to recursively write a file with specified content to every directory under a given root directory.
-This is useful for marking directories (e.g., with a `.backup` or `.nomedia` file), automation, or batch configuration.
+**markdirs** is a command-line tool to recursively write a file with specified content to every directory under one or more root directories.
+This is useful for marking directories (e.g., with a `.backup` or `.nomedia` file), automation, or batch configuration tasks.
+
+## Quick Start
+
+**Mark all directories under /data1 and /data2 with a .backup file containing "This folder is backed up":**
+
+`markdirs /data1 /data2 .backup "This folder is backed up"`
+
+**Or, pipe file content from stdin (the dash means “read from stdin”) and overwrite any existing NOTICE.txt files:**
+
+``cat notice.txt | markdirs -o /var/www NOTICE.txt -``
 
 ## Features
 
-* Recursively create a file in every directory under a root path
+* Recursively create a file in every directory under each root path
 * Optionally overwrite existing files
-* Content can be provided as a string or from standard input
+* Content can be provided as a string or from standard input (when - is supplied)
 * Quiet mode to suppress informational output
+* "Best effort" mode: by default, errors are ignored and processing continues; use -f to fail fast on errors
 * Simple, single binary – no dependencies
 
 ## Usage
 
 ```shell
-markdirs [flags] <directory> <file> <content | ->
+markdirs [flags] <directory>... <file> <content | ->
 
-Recursively write a file with the specified name and content to every folder under <directory>.
+Recursively write a file with the specified name and content to every folder under each <directory>.
 ```
 
 ### Flags
@@ -38,19 +49,19 @@ Recursively write a file with the specified name and content to every folder und
 
 ## Examples
 
-**Write a file named **`** with the content “This folder is backed up” to every directory under **`**:**
+**Write a file named .backup with the content “This folder is backed up” to every directory under /data1 and /data2:**
 
 ```shell
-markdirs /data .backup "This folder is backed up"
+markdirs /data1 /data2 .backup "This folder is backed up"
 ```
 
-**Write the contents of a local file (**`**) to every directory under **`**, overwriting existing files:**
+**Write the contents of a local file to every directory under /var/www, overwriting existing files named NOTICE.txt:**
 
 ```shell
 cat notice.txt | markdirs -o /var/www NOTICE.txt -
 ```
 
-**Quietly mark all directories with a **\`\`** file:**
+**Quietly mark all directories in /photos with empty file named .nomedia:**
 
 ```shell
 markdirs -q /photos .nomedia ""

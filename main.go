@@ -11,21 +11,21 @@ import (
 )
 
 var (
-	// Version is the version of the tool, set at build time
+	// version information is set at build time in the release.sh script
 	Version   = "dev"
 	Commit    = ""
 	BuildDate = ""
 )
 
 func usage() {
-	fmt.Fprintf(os.Stderr, `Usage: %s [flags] <directory> <file> <content|- for stdin>
+	fmt.Fprintf(os.Stderr, `Usage: %s [flags] <directory>... <file> <content|- for stdin>
 
-Recursively write a file with the specified name and content to every folder under <directory>.
+Recursively write a file with the specified name and content to every folder under each <directory>.
 
 Flags:
   -o    Overwrite existing files (default: do not overwrite)
   -q    Quiet mode (suppress output except errors)
-  -m    File permission/mode (default: 0644)
+  -m    File permission/mode (default: 0644, e.g., 0600, 0640)
   -f    Fail fast on error (default: continue processing)
   -v    Show version information and exit
   -h    Show this help message
@@ -60,12 +60,15 @@ func run() int {
 
 	args := flag.Args()
 
-	if len(args) != 3 {
+	if len(args) < 3 {
 		usage()
 		return 1
 	}
 
-	root, fileName, contentArg := args[0], args[1], args[2]
+	// Everything but last two are directories to process
+	dirs := args[:len(args)-2]
+	fileName := args[len(args)-2]
+	contentArg := args[len(args)-1]
 
 	modeInt, err := strconv.ParseUint(*mode, 8, 32)
 	if err != nil {
@@ -89,11 +92,16 @@ func run() int {
 		return 1
 	}
 
-	err = markdirs.MarkDirs(root, fileName, content, *overwrite, *quiet, *failFast, fileMode)
+	for _, dir := range dirs {
+		err = markdirs.MarkDirs(dir, fileName, content, *overwrite, *quiet, *failFast, fileMode)
 
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "WalkDir error: %v\n", err)
-		return 1
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "WalkDir error: %v\n", err)
+
+			if *failFast {
+				return 1
+			}
+		}
 	}
 
 	return 0
