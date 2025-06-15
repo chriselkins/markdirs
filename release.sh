@@ -44,4 +44,7 @@ echo "Release ${VERSION} published!"
 # Prompt pkg.go.dev to fetch the new tag
 echo "Requesting pkg.go.dev to fetch ${VERSION}..."
 go list -m "github.com/chriselkins/markdirs@${VERSION}" || true
-curl -sSf "https://pkg.go.dev/github.com/chriselkins/markdirs@${VERSION}" > /dev/null || true
+curl -sSf "https://proxy.golang.org/github.com/chriselkins/markdirs/@v/${VERSION}.info" > /dev/null || true
+echo "To make sure pkg.go.dev indexes your new version, visit:"
+echo "  https://pkg.go.dev/github.com/chriselkins/markdirs@${VERSION}"
+echo "and click the 'Request' button if available."
