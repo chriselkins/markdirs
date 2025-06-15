@@ -50,10 +50,10 @@ markdirs -q /photos .nomedia ""
 
 ## Build
 
-Requires Go 1.18 or newer.
+Requires Go 1.24 or newer.
 
 ```shell
-go build -o markdirs
+make release
 ```
 
 ## Exit Codes
