@@ -38,14 +38,14 @@ Recursively write a file with the specified name and content to every folder und
 
 ### Flags
 
-| Flag | Description                                     |
-| ---- | ----------------------------------------------- |
-| `-o` | Overwrite existing files (default: skip)        |
-| `-q` | Quiet mode (suppress output)                    |
-| `-m` | File permission/mode (e.g., 0644, 0600)         |
-| `-f` | Fail immediately on error instead of continuing |
-| `-h` | Show help and exit                              |
-| `-v` | Print version and exit                          |
+| Flag | Description                                            |
+| ---- | ------------------------------------------------------ |
+| `-o` | Overwrite existing files (default: skip)               |
+| `-q` | Quiet mode (suppress output)                           |
+| `-m` | File permission/mode (default: 0644, e.g., 0600, 0640) |
+| `-f` | Fail immediately on error instead of continuing        |
+| `-h` | Show help and exit                                     |
+| `-v` | Print version and exit                                 |
 
 ## Examples
 
