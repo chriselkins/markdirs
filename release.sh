@@ -41,4 +41,5 @@ echo "Release ${VERSION} published!"
 
 # Prompt pkg.go.dev to fetch the new tag
 echo "Requesting pkg.go.dev to fetch ${VERSION}..."
-go list -m "github.com/chriselkins/markdirs@${VERSION}"
+go list -m "github.com/chriselkins/markdirs@${VERSION}" || true
+curl -sSf "https://pkg.go.dev/github.com/chriselkins/markdirs@${VERSION}" > /dev/null || true
