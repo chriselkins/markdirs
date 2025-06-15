@@ -1,3 +1,9 @@
+[![Build Status](https://github.com/chriselkins/markdirs/actions/workflows/go.yml/badge.svg)](https://github.com/chriselkins/markdirs/actions/workflows/go.yml)
+[![Go Reference](https://pkg.go.dev/badge/github.com/chriselkins/markdirs.svg)](https://pkg.go.dev/github.com/chriselkins/markdirs)
+[![Go Report Card](https://goreportcard.com/badge/github.com/chriselkins/markdirs)](https://goreportcard.com/report/github.com/chriselkins/markdirs)
+[![GitHub release](https://img.shields.io/github/v/release/chriselkins/markdirs)](https://github.com/chriselkins/markdirs/releases)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 # markdirs
 
 **markdirs** is a command-line tool to recursively write a file with specified content to every directory under a given root directory.
